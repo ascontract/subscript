@@ -1,0 +1,4 @@
+test.sh
+tsconfig.json
+assembly/__tests__
+**/*/__tests__
