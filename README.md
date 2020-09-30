@@ -6,3 +6,6 @@ Subscript is a smart contract language written in AssemblyScript for substrate b
 
 Similar to parity ink, Subscript is built on top of  AssemblyScript and follow all AssemblyScript syntax. Subscript is more like a development kit with some builtin module and tools. As assemblyscript is easy to interact with TypeScript and JavaScript, Subscript is much more friendly for dapp developers.
 
+The project is funded by
+
+<img align="left" width="200" src="./img/w3f_grants_badge_black.svg">
