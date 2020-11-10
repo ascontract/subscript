@@ -64,6 +64,12 @@ export namespace hostapi {
   // Dump the balance of the current account into the supplied buffer.
   export declare function ext_balance(): void;
 
+  // Stores a random number for the current block and the given subject into the supplied buffer.
+  export declare function ext_random(): void;
+
+  // Load the latest block timestamp into the supplied buffer.
+  export declare function ext_now(): void;
+
   // Deposit a contract event with the data buffer and optional list of topics. There is a limit
   // on the maximum number of topics specified by `max_event_topics`.
   export declare function ext_deposit_event(
