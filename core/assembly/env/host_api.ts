@@ -66,4 +66,32 @@ export namespace hostapi {
 
   // Dump current block number of contract into the supplied buffer.
   export declare function ext_block_number(): void;
+
+  // Computes the SHA2 256-bit hash on the given input buffer.
+  export declare function ext_hash_sha2_256(
+    input_ptr: i32,
+    input_len: i32,
+    output_ptr: i32)
+  : void;
+
+  // Computes the KECCAK 256-bit hash on the given input buffer.
+  export declare function ext_hash_keccak_256(
+    input_ptr: i32,
+    input_len: i32,
+    output_ptr: i32)
+  : void;
+
+  // Computes the BLAKE2 128-bit hash on the given input buffer.
+  export declare function ext_hash_blake2_128(
+    input_ptr: i32,
+    input_len: i32,
+    output_ptr: i32)
+  : void;
+
+  // Computes the BLAKE2 256-bit hash on the given input buffer.
+  export declare function ext_hash_blake2_256(
+    input_ptr: i32,
+    input_len: i32,
+    output_ptr: i32)
+  : void;
 }
