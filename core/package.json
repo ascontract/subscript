@@ -7,7 +7,7 @@
     "url": "git+https://github.com:slickup/subscript",
     "directory": "packages/core"
   },
-  "author": "Symon Ho <hesynote@gmail.com>",
+  "author": "Symon Ho",
   "license": "Apache-2.0",
   "dependencies": {
     "as-bignum": "^0.2.4",
