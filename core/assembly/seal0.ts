@@ -54,6 +54,11 @@ export declare function seal_instantiate(
   salt_len: i32
 ): i32;
 
+export declare function seal_input(
+  buf_ptr: i32,
+  buf_len_ptr: i32
+): void;
+
 // Cease contract execution and save a data buffer as a result of the
 // execution.
 export declare function seal_return(
