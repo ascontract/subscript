@@ -12,10 +12,12 @@ export namespace storage {
     }
   }
 
-  export function get(key: Uint8Array): Uint8Array {
-    const result = seal_get_storage(key.dataStart as i32);
-    let value = new Uint8Array(0);
+  export function get(key: Uint8Array, length: i32): Uint8Array {
+    let value = new Uint8Array(length);
+    let out_len = new Int32Array(1);
+    out_len[0] = length;
 
+    const result = seal_get_storage(key.dataStart as i32, value.dataStart as i32, out_len.dataStart as i32);
     return value;
   }
 }
