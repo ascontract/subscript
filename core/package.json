@@ -1,5 +1,5 @@
 {
-  "name": "subscript-core",
+  "name": "@subscript/core",
   "version": "0.0.1",
   "description": "Core AssemblyScript package for substrate smart contract",
   "repository": {
@@ -9,26 +9,19 @@
   },
   "author": "Symon Ho",
   "license": "Apache-2.0",
+  "ascMain": "assembly/index.ts",
   "dependencies": {
     "as-bignum": "^0.2.4",
-    "asbuild": "^0.0.8",
-    "assemblyscript": "^0.14.9",
-    "assemblyscript-json": "^0.3.3",
+    "assemblyscript": "^0.14.13",
     "@assemblyscript/loader": "^0.14.13"
   },
   "scripts": {
-    "asbuild:untouched": "asc assembly/index.ts --target debug",
-    "asbuild:optimized": "asc assembly/index.ts --target release",
-    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
+    "build": "npm run asbuild",
+    "asbuild:tsd": "asc assembly/index.ts -d build/index.d.ts",
+    "asbuild:optimized": "asc assembly/index.ts -b build/core.wasm -t build/core.wat --importMemory --noAssert --use abort=  --sourceMap --optimize",
+    "asbuild": "npm run asbuild:tsd && npm run asbuild:optimized"
   },
-  "devDependencies": {
-    "@types/js-base64": "^3.0.0",
-    "@types/node": "^14.6.2",
-    "assert-no-diff": "^3.0.4",
-    "ts-node": "^9.0.0",
-    "typedoc": "^0.18.0",
-    "typescript": "^3.6.4"
-  },
+  "devDependencies": {},
   "engines": {
     "node": ">=12.0.0"
   }

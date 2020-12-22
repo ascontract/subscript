@@ -3,7 +3,7 @@ import {
   seal_set_storage
 } from "./seal0";
 
-export namespace storage {
+export namespace Storage {
   export function set(key: Uint8Array, value: Uint8Array | null): void {
     if(key.length === 32) {
       const pointer = value!.dataStart as i32 || 0;

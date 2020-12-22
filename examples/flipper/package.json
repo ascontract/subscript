@@ -1,0 +1,20 @@
+{
+  "name": "@subscript/flipper",
+  "version": "0.0.1",
+  "description": "Flipper contract example",
+  "author": "Symon Ho",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build:optimized": "asc assembly/index.ts -b build/flipper-raw.wasm -t build/flipper-raw.wat --importMemory --noAssert --use abort= --optimize --initialMemory=16 --maximumMemory=16",
+    "build:tsd": "asc assembly/index.ts -d build/index.d.ts",
+    "build": "yarn build:optimized && yarn build:tsd",
+    "clean": "rm -rf node_modules && rm -rf build"
+  },
+  "dependencies": {
+    "as-bignum": "^0.2.4",
+    "assemblyscript": "^0.14.9",
+    "@assemblyscript/loader": "^0.14.13"
+  }
+}

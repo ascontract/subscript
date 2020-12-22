@@ -1,0 +1,25 @@
+{
+  "name": "subscript",
+  "version": "0.0.1",
+  "description": "Core AssemblyScript package for substrate smart contract",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com:slickup/subscript"
+  },
+  "author": "Symon Ho",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "as-bignum": "^0.2.4",
+    "assemblyscript": "^0.14.13",
+    "@assemblyscript/loader": "^0.14.13"
+  },
+  "devDependencies": {},
+  "private": true,
+  "workspaces": [
+    "core",
+    "examples/*"
+  ],
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
