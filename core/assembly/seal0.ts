@@ -63,6 +63,7 @@ export declare function seal_input(
 // Cease contract execution and save a data buffer as a result of the
 // execution.
 export declare function seal_return(
+  flags: u32,
   data_ptr: i32,
   data_len: i32
 ): void;

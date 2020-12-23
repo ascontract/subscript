@@ -1,5 +1,6 @@
 import {
-  seal_input
+  seal_input,
+  seal_return
 } from "./seal0";
 
 
@@ -20,5 +21,9 @@ export namespace Contract {
     let res = new Uint8Array(out_len[0]);
     memory.copy(res.dataStart, out.dataStart, out_len[0]);
     return res;
+  }
+
+  export function returnValue(value: Uint8Array): void {
+    seal_return(0, value.dataStart as i32, value.length)
   }
 }
