@@ -9,8 +9,16 @@ export namespace Contract {
    * @description
    * Returns the address of the caller.
    */
-  export function seal_input(): Uint8Array {
-    let input = new Uint8Array(0);
-    return input;
+
+  const CAPACITY: i32 = 1024;
+
+  export function input(): Uint8Array {
+    let out = new Uint8Array(CAPACITY);
+    let out_len = new Int32Array(1);
+    out_len[0] = CAPACITY;
+    seal_input(out.dataStart as i32, out_len.dataStart as i32);
+    let res = new Uint8Array(out_len[0]);
+    memory.copy(res.dataStart, out.dataStart, out_len[0]);
+    return res;
   }
 }
