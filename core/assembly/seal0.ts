@@ -54,6 +54,7 @@ export declare function seal_instantiate(
   salt_len: i32
 ): i32;
 
+// It copies the input to the contract call to supplied buffer
 export declare function seal_input(
   buf_ptr: i32,
   buf_len_ptr: i32
