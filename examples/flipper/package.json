@@ -7,10 +7,10 @@
   "types": "build/index.d.ts",
   "license": "Apache-2.0",
   "scripts": {
-    "build:optimized": "asc assembly/index.ts -b build/flipper-raw.wasm -t build/flipper-raw.wat --importMemory --noAssert --use abort= --optimize --initialMemory=16 --maximumMemory=16",
+    "build:optimized": "asc assembly/index.ts -b build/flipper-raw.wasm -t build/flipper-raw.wat --runtime half --noExportMemory --importMemory --noAssert --use abort= --optimize --initialMemory=16 --maximumMemory=16",
     "build:tsd": "asc assembly/index.ts -d build/index.d.ts",
     "prune": "wasm-prune --exports call,deploy build/flipper-raw.wasm build/flipper.wasm",
-    "build": "yarn build:optimized && yarn run prune && yarn build:tsd",
+    "build": "yarn build:optimized && yarn build:tsd",
     "clean": "rm -rf node_modules && rm -rf build"
   },
   "dependencies": {
