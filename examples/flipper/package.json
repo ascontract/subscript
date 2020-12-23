@@ -9,7 +9,8 @@
   "scripts": {
     "build:optimized": "asc assembly/index.ts -b build/flipper-raw.wasm -t build/flipper-raw.wat --importMemory --noAssert --use abort= --optimize --initialMemory=16 --maximumMemory=16",
     "build:tsd": "asc assembly/index.ts -d build/index.d.ts",
-    "build": "yarn build:optimized && yarn build:tsd",
+    "prune": "wasm-prune --exports call,deploy build/flipper-raw.wasm build/flipper.wasm",
+    "build": "yarn build:optimized && yarn run prune && yarn build:tsd",
     "clean": "rm -rf node_modules && rm -rf build"
   },
   "dependencies": {

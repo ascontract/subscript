@@ -12,10 +12,10 @@ function handle(input: Uint8Array): Uint8Array {
   return state;
 }
 
-export function call(): u32 {
-  return 0;
+export function call(): void {
+  return;
 }
 
-export function deploy(): u32 {
-  return 0;
+export function deploy(): void {
+  return;
 }
