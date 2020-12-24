@@ -14,9 +14,7 @@ export namespace Contract {
   const CAPACITY: i32 = 1024;
 
   /**
-   * @name input
-   * @description
-   * Returns the address of the caller.
+   * @description Returns the address of the caller.
    */
   export function input(): Uint8Array {
     let out = new Uint8Array(CAPACITY);
@@ -29,18 +27,14 @@ export namespace Contract {
   }
 
   /**
-   * @name returnValue
-   * @description
-   * Returns output buffer to contract
+   * @description Returns output buffer to contract
    */
   export function returnValue(value: Uint8Array): void {
     seal_return(0, value.dataStart as i32, value.length);
   }
 
   /**
-   * @name caller
-   * @description
-   * Returns the address of the caller.
+   * @description Returns the address of the caller.
    */
   export function caller(): Uint8Array {
     let out = new Uint8Array(32);
@@ -52,9 +46,7 @@ export namespace Contract {
   }
 
   /**
-   * @name address
-   * @description
-   * Returns the address of the executed contract.
+   * @description Returns the address of the executed contract.
    */
   export function address(): Uint8Array {
     let out = new Uint8Array(32);
@@ -68,9 +60,7 @@ export namespace Contract {
   }
 
   /**
-   * @name gasLeft
-   * @description
-   * Returns the amount of gas left for the contract execution.
+   * @description Returns the amount of gas left for the contract execution.
    */
   export function gasLeft(): Uint8Array {
     let out = new Uint8Array(16);
@@ -84,9 +74,7 @@ export namespace Contract {
   }
 
   /**
-   * @name balance
-   * @description
-   * Returns the balance of the executed contract.
+   * @description Returns the balance of the executed contract.
    */
   export function balance(): Uint8Array {
     let out = new Uint8Array(16);
@@ -100,9 +88,7 @@ export namespace Contract {
   }
 
   /**
-   * @name transferredValue
-   * @description
-   * Returns the transferred balance for the contract execution.
+   * @description Returns the transferred balance for the contract execution.
    */
   export function transferredValue(): Uint8Array {
     let out = new Uint8Array(16);
@@ -116,9 +102,7 @@ export namespace Contract {
   }
 
   /**
-   * @name timestamp
-   * @description
-   * Returns the current block timestamp.
+   * @description Returns the current block timestamp.
    */
   export function timestamp(): Uint8Array {
     let out = new Uint8Array(8);
@@ -132,9 +116,7 @@ export namespace Contract {
   }
 
   /**
-   * @name blockNumber
-   * @description
-   * Returns the address of the executed contract.
+   * @description Returns the address of the executed contract.
    */
   export function blockNumber(): Uint8Array {
     let out = new Uint8Array(8);
@@ -146,5 +128,4 @@ export namespace Contract {
     memory.copy(res.dataStart, out.dataStart, out_len[0]);
     return res;
   }
-
 }
