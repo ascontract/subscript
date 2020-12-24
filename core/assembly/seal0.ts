@@ -71,7 +71,7 @@ export declare function seal_return(
 // Dump the address of the caller into the supplied buffer.
 export declare function seal_caller(
   data_ptr: i32,
-  data_len: i32
+  data_len_ptr: i32
 ): void;
 
 // Retrive the address of contract into the supplied buffer.
@@ -88,6 +88,12 @@ export declare function seal_gas_left(
 
 // Dump the balance of the current account into the supplied buffer.
 export declare function seal_balance(
+  out_ptr: i32,
+  out_len_ptr: i32
+): void;
+
+// Retrive the value transferred along with this call or as endowment into the supplied buffer.
+export declare function seal_value_transferred(
   out_ptr: i32,
   out_len_ptr: i32
 ): void;
