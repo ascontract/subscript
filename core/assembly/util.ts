@@ -20,13 +20,25 @@ export namespace Util {
   }
 
   /**
-   * Calculates the byte length of the specified UTF-8 string, which can optionally be null terminated.
+   * Converts typed array to array
    */
-  export function UTF8Length(
-    str: string,
-    nullTerminated: boolean = false
-  ): usize {
-    return String.UTF8.byteLength(str, nullTerminated);
+  export function typedToArray(arr: Uint8Array): Array<u8> {
+    let result = new Array<u8>(arr.length);
+    for (let i = 0; i < arr.length; i++) {
+        result[i] = arr[i];
+    }
+    return result;
+  }
+
+  /**
+   * Converts array to typed array
+   */
+  export function arrayToTyped(arr: Array<u8>): Uint8Array {
+    let result = new Uint8Array(arr.length);
+    for (let i = 0; i < arr.length; i++) {
+        result[i] = arr[i];
+    }
+    return result;
   }
 
   function uint8ArrayToBuffer(array: Uint8Array): ArrayBuffer {
