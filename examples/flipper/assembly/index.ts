@@ -34,6 +34,7 @@ export function call(): void {
   switch (selector) {
     case Method.Flip: {
       flip();
+      break;
     }
     case Method.Get: {
       Contract.returnValue(get());
