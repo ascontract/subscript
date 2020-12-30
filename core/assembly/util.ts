@@ -41,6 +41,19 @@ export namespace Util {
     return result;
   }
 
+
+  /**
+   * Convert a number to typed array
+   */
+  export function toBytes<T>(num: T): Uint8Array {
+  if (isInteger<T>()) {
+    const arr = new Uint8Array(sizeof<T>());
+    store<T>(arr.dataStart, num);
+    return arr;
+  }
+  assert(false);
+}
+
   function uint8ArrayToBuffer(array: Uint8Array): ArrayBuffer {
     return array.buffer.slice(
       array.byteOffset,
