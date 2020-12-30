@@ -11,31 +11,34 @@ enum Method {
   Flip = 0xc096a5f3,
 }
 
-function handle(input: Uint8Array): Uint8Array {
-  if (input.length < 4) {
-    return (new Uint8Array(0));
-  }
-
+function get(): Uint8Array {
   const data = Storage.get(STORE_KEY, 1);
   const status: u8 = data.length ? (new DataView(data.buffer)).getUint8(0) : 0;
+  return (new Uint8Array(1)).fill(status);
+}
+
+function flip(): bool {
+  const data = Storage.get(STORE_KEY, 1);
+  const status: u8 = data.length ? (new DataView(data.buffer)).getUint8(0) : 0;
+  Storage.set(STORE_KEY, Util.toBytes(!status));
+  return true;
+}
+
+export function call(): void {
+  const input = Contract.input();
+  if (input.length < 4) {
+    return;
+  }
 
   const selector = bswap(load<i32>(input.dataStart, 0));
   switch (selector) {
     case Method.Flip: {
-      Storage.set(STORE_KEY, Util.toBytes(!status));
-      return (new Uint8Array(0));
+      flip();
     }
     case Method.Get: {
-      return (new Uint8Array(1)).fill(status);
+      Contract.returnValue(get());
+      break;
     }
-  }
-  return (new Uint8Array(0));
-}
-
-export function call(): void {
-  const out = handle(Contract.input());
-  if (out.length > 0) {
-    Contract.returnValue(out);
   }
   return;
 }
