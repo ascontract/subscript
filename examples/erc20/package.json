@@ -1,0 +1,23 @@
+{
+  "name": "@subscript/erc20",
+  "version": "0.0.1",
+  "description": "ERC20 contract example",
+  "author": "Symon Ho",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build:optimized": "asc assembly/index.ts -b build/erc20.wasm -t build/erc20.wat --runtime half --noExportMemory --importMemory --noAssert --use abort= --optimize --initialMemory=16 --maximumMemory=16",
+    "build:tsd": "asc assembly/index.ts -d build/index.d.ts",
+    "build:prune": "wasm-prune --exports call,deploy build/erc20.wasm build/erc20-strip.wasm",
+    "build:text": "wasm2wat build/erc20-strip.wasm -o build/erc20-strip.wat",
+    "build": "yarn build:optimized && yarn build:tsd",
+    "clean": "rm -rf node_modules && rm -rf build"
+  },
+  "dependencies": {
+    "as-bignum": "^0.2.4",
+    "as-scale-codec": "^0.2.0",
+    "assemblyscript": "^0.14.9",
+    "@assemblyscript/loader": "^0.14.13"
+  }
+}
