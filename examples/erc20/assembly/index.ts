@@ -2,15 +2,37 @@ import { u128 } from "as-bignum";
 import {
   Util,
   Storage,
+  Crypto,
   Contract
 } from "@subscript/core";
 
 const STORE_KEY = (new Uint8Array(32)).fill(0);
+const BALANCE_POSITION = (new Uint8Array(32)).fill(0);
+const ALLOWANCE_POSITION = (new Uint8Array(32)).fill(1, 0, 1);
 
 enum Method {
   BalanceOf = 0x56e929b2,
   Transfer = 0xfae3a09d,
   TotalSupply = 0xdcb736b5
+}
+
+
+@inline
+function balanceKey(addr: Uint8Array): Uint8Array {
+  const store = new Uint8Array(64);
+  store.set(addr);
+  store.set(BALANCE_POSITION, 32);
+
+  return Crypto.blake2b256(store);
+}
+
+@inline
+function allowanceKey(addr: Uint8Array): Uint8Array {
+  const store = new Uint8Array(64);
+  store.set(addr);
+  store.set(BALANCE_POSITION, 32);
+
+  return Crypto.blake2b256(store);
 }
 
 function totalSupply(): Uint8Array {
@@ -25,7 +47,7 @@ function totalSupply(): Uint8Array {
 function balanceOf(params: Uint8Array): Uint8Array {
   const input = params.subarray(4);
   const owner = input;
-  const data = Storage.get(owner, 16);
+  const data = Storage.get(balanceKey(owner), 16);
   if (data.length > 0) {
     return data;
   } else {
@@ -39,15 +61,18 @@ function transfer(params: Uint8Array): void {
   const dest = input.subarray(0, 32);
   const value = u128.from(input.subarray(32, 48));
 
-  const data = Storage.get(owner, 16);
+  const ownerKey = balanceKey(owner);
+  const destKey = balanceKey(dest);
+
+  const data = Storage.get(ownerKey, 16);
   const ownerBalance = (data.length > 0) ? u128.from(data): u128.from(0);
 
-  const receiver = Storage.get(dest, 16);
+  const receiver = Storage.get(destKey, 16);
   const destBalance = (receiver.length > 0) ? u128.from(receiver): u128.from(0);
 
   if (ownerBalance >= value) {
-    Storage.set(owner, (ownerBalance - value).toUint8Array());
-    Storage.set(dest, (destBalance + value).toUint8Array());
+    Storage.set(ownerKey, (ownerBalance - value).toUint8Array());
+    Storage.set(destKey, (destBalance + value).toUint8Array());
   }
 }
 
@@ -83,7 +108,7 @@ export function deploy(): void {
 
   const total = input.subarray(4);
   const caller = Contract.caller();
-  Storage.set(caller, total);
+  Storage.set(balanceKey(caller), total);
   Storage.set(STORE_KEY, total);
   return;
 }
