@@ -8,6 +8,7 @@ import {
   seal_value_transferred,
   seal_block_number,
   seal_now,
+  seal_deposit_event
 } from "./seal0";
 
 export namespace Contract {
@@ -127,5 +128,17 @@ export namespace Contract {
     let res = new Uint8Array(out_len[0]);
     memory.copy(res.dataStart, out.dataStart, out_len[0]);
     return res;
+  }
+
+  /**
+   * @description emit event and logs data
+   */
+  export function emitEvent(topics: Uint8Array, data: Uint8Array): void {
+    let topics_len = new Int32Array(1);
+    topics_len[0] = topics.length;
+
+    let data_len = new Int32Array(1);
+    data_len[0] = data.length;
+    seal_deposit_event(topics.dataStart as i32, topics_len.dataStart as i32, data.dataStart as i32, data_len.dataStart as i32);
   }
 }
