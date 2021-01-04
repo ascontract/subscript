@@ -134,11 +134,6 @@ export namespace Contract {
    * @description emit event and logs data
    */
   export function emitEvent(topics: Uint8Array, data: Uint8Array): void {
-    let topics_len = new Int32Array(1);
-    topics_len[0] = topics.length;
-
-    let data_len = new Int32Array(1);
-    data_len[0] = data.length;
-    seal_deposit_event(topics.dataStart as i32, topics_len.dataStart as i32, data.dataStart as i32, data_len.dataStart as i32);
+    seal_deposit_event(topics.dataStart as i32, topics.length, data.dataStart as i32, data.length);
   }
 }
