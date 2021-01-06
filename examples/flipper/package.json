@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "as-bignum": "^0.2.4",
-    "assemblyscript": "^0.14.9",
-    "@assemblyscript/loader": "^0.14.13"
+    "assemblyscript": "^0.16.1",
+    "@assemblyscript/loader": "^0.16.1"
   }
 }

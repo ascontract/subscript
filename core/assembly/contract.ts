@@ -1,3 +1,5 @@
+import { AbstractArray } from "as-scale-codec/Arrays/AbstractArray";
+import { Hash, CompactInt, BIT_LENGTH } from "as-scale-codec";
 import {
   seal_input,
   seal_return,
@@ -133,7 +135,15 @@ export namespace Contract {
   /**
    * @description emit event and logs data
    */
-  export function emitEvent(topics: Uint8Array, data: Uint8Array): void {
-    seal_deposit_event(topics.dataStart as i32, topics.length, data.dataStart as i32, data.length);
+  export function emitEvent(topics: Hash[], data: Uint8Array): void {
+
+    let buffer: u8[] = [];
+    const length = new CompactInt(topics.length);
+    buffer = buffer.concat(length.toU8a());
+
+    for (let i = 0; i < topics.length; i++){
+        buffer = buffer.concat(topics[i].toU8a());
+    }
+    seal_deposit_event(buffer.dataStart as i32, buffer.length, data.dataStart as i32, data.length);
   }
 }

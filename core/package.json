@@ -12,8 +12,9 @@
   "ascMain": "assembly/index.ts",
   "dependencies": {
     "as-bignum": "^0.2.4",
-    "assemblyscript": "^0.14.13",
-    "@assemblyscript/loader": "^0.14.13"
+    "as-scale-codec": "git+https://github.com/ascontract/as-scale-codec.git#149c634773a0544b4919aa3fb6f474c4f0f8a9ad",
+    "assemblyscript": "^0.16.1",
+    "@assemblyscript/loader": "^0.16.1"
   },
   "scripts": {
     "build": "npm run asbuild",
