@@ -41,18 +41,27 @@ export namespace Util {
     return result;
   }
 
+  export function arrayEqual<T>(a: Array<T>, b: Array<T>): bool {
+    if (a.length != b.length) {
+      return false;
+    }
 
-  /**
-   * Convert a number to typed array
-   */
-  export function toBytes<T>(num: T): Uint8Array {
-  if (isInteger<T>()) {
-    const arr = new Uint8Array(sizeof<T>());
-    store<T>(arr.dataStart, num);
-    return arr;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) {
+        return false;
+      }
+    }
+    return true;
   }
-  assert(false);
-}
+
+  export function toBytes<T>(num: T): Uint8Array {
+    if (isInteger<T>()) {
+      const arr = new Uint8Array(sizeof<T>());
+      store<T>(arr.dataStart, num);
+      return arr;
+    }
+    assert(false);
+  }
 
   function uint8ArrayToBuffer(array: Uint8Array): ArrayBuffer {
     return array.buffer.slice(
