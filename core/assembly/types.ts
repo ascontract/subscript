@@ -9,33 +9,42 @@ export class AccountId implements Codec {
   private address: u8[];
 
   constructor(bytes: u8[] = []) {
-      this.address = new Array<u8>();
-      this.address = this.address.concat(bytes);
+    assert(bytes.length == AccountId.ADDRESS_LENGTH, "AccountId: must 32 bytes length");
+    this.address = new Array<u8>();
+    this.address = this.address.concat(bytes);
   }
 
   getAddress(): u8[] {
-      return this.address;
+    return this.address;
   }
 
   encodedLength(): i32 {
-      return this.address.length;
+    return this.address.length;
   }
 
   toU8a(): u8[]{
-      return this.address;
+    return this.address;
   }
 
   populateFromBytes(bytes: u8[], index: i32 = 0): void {
-      this.address = new Array<u8>();
-      this.address = this.address.concat(bytes.slice(index, AccountId.ADDRESS_LENGTH));
+    this.address = new Array<u8>();
+    this.address = this.address.concat(bytes.slice(index, AccountId.ADDRESS_LENGTH));
   }
 
   eq(other: AccountId): bool {
-      return Util.arrayEqual(this.getAddress(), other.getAddress());
+    return Util.arrayEqual(this.getAddress(), other.getAddress());
   }
 
   notEq(other: AccountId): bool {
-      return this.eq(other);
+    return this.eq(other);
+  }
+
+ 	/**
+   * Create new Account ID from Bytes Array
+   */
+  static fromU8Array(input: u8[]): AccountId {
+    const a = input.slice(0, AccountId.ADDRESS_LENGTH);
+    return new AccountId(a);
   }
 
   @inline @operator('==')
