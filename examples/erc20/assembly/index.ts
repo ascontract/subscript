@@ -1,14 +1,26 @@
-import { u128 } from "as-bignum";
+import { BytesReader } from "as-scale-codec";
 import {
   Util,
   Storage,
   Crypto,
-  Contract
+  Contract,
+  Balance,
+  AccountId
 } from "@subscript/core";
 
+/**
+ * Map key of TotalSupply
+ */
 const STORE_KEY = (new Uint8Array(32)).fill(0);
+/**
+ * Offset of address map key
+ */
 const BALANCE_POSITION = (new Uint8Array(32)).fill(0);
 
+/**
+ * Selector of method, now defined by const
+ * may be replace by hash(function_name)
+ */
 enum Method {
   BalanceOf = 0x56e929b2,
   Transfer = 0xfae3a09d,
@@ -19,20 +31,28 @@ enum Method {
 }
 
 
+/**
+ * Return the Map key of user balance
+ * key = address + position
+ */
 @inline
-function balanceKey(addr: Uint8Array): Uint8Array {
+function balanceKey(addr: AccountId): Uint8Array {
   const store = new Uint8Array(64);
-  store.set(addr);
+  store.set(Util.arrayToTyped(addr.getAddress()));
   store.set(BALANCE_POSITION, 32);
 
   return Crypto.blake2b256(store);
 }
 
+/**
+ * Return the Map key of allowance
+ * key = owner + spender
+ */
 @inline
-function allowanceKey(owner: Uint8Array, spender: Uint8Array): Uint8Array {
+function allowanceKey(owner: AccountId, spender: AccountId): Uint8Array {
   const store = new Uint8Array(64);
-  store.set(owner);
-  store.set(spender, 32);
+  store.set(Util.arrayToTyped(owner.getAddress()));
+  store.set(Util.arrayToTyped(spender.getAddress()), 32);
 
   return Crypto.blake2b256(store);
 }
@@ -46,9 +66,7 @@ function totalSupply(): Uint8Array {
   }
 }
 
-function balanceOf(params: Uint8Array): Uint8Array {
-  const input = params.subarray(4);
-  const owner = input;
+function balanceOf(owner: AccountId): Uint8Array {
   const data = Storage.get(balanceKey(owner), 16);
   if (data.length > 0) {
     return data;
@@ -57,20 +75,17 @@ function balanceOf(params: Uint8Array): Uint8Array {
   }
 }
 
-function transfer(params: Uint8Array): void {
-  const input = params.subarray(4);
-  const owner = Contract.caller();
-  const dest = input.subarray(0, 32);
-  const value = u128.from(input.subarray(32, 48));
+function transfer(dest: AccountId, value: Balance): void {
+  const owner = getCaller();
 
   const ownerKey = balanceKey(owner);
   const destKey = balanceKey(dest);
 
   const data = Storage.get(ownerKey, 16);
-  const ownerBalance = (data.length > 0) ? u128.from(data): u128.from(0);
+  const ownerBalance = (data.length > 0) ? Balance.from(data): Balance.from(0);
 
   const receiver = Storage.get(destKey, 16);
-  const destBalance = (receiver.length > 0) ? u128.from(receiver): u128.from(0);
+  const destBalance = (receiver.length > 0) ? Balance.from(receiver): Balance.from(0);
 
   if (ownerBalance >= value) {
     Storage.set(ownerKey, (ownerBalance - value).toUint8Array());
@@ -78,10 +93,7 @@ function transfer(params: Uint8Array): void {
   }
 }
 
-function allowance(params: Uint8Array): Uint8Array {
-  const input = params.subarray(4);
-  const owner = input.subarray(0, 32);
-  const spender = input.subarray(32, 64);
+function allowance(owner: AccountId, spender: AccountId): Uint8Array {
 
   const data = Storage.get(allowanceKey(owner, spender), 16);
   if (data.length > 0) {
@@ -91,34 +103,27 @@ function allowance(params: Uint8Array): Uint8Array {
   }
 }
 
-function approve(params: Uint8Array): void {
-  const input = params.subarray(4);
-  const owner = Contract.caller();
-  const spender = input.subarray(0, 32);
-  const value = u128.from(input.subarray(32, 48));
+function approve(spender: AccountId, value: Balance): void {
+  const owner = getCaller();
 
   Storage.set(allowanceKey(owner, spender), value.toUint8Array());
 }
 
-function transferFrom(params: Uint8Array): void {
-  const input = params.subarray(4);
-  const spender = Contract.caller();
-  const owner = input.subarray(0, 32);
-  const receiver = input.subarray(32, 64);
-  const value = u128.from(input.subarray(64, 80));
+function transferFrom(owner: AccountId, receiver: AccountId, value: Balance): void {
+  const spender = getCaller();
 
   const ownerKey = balanceKey(owner);
   const destKey = balanceKey(receiver);
   const allow = allowanceKey(owner, spender);
 
   const data = Storage.get(allow, 16);
-  const allowBalance = (data.length > 0) ? u128.from(data): u128.from(0);
+  const allowBalance = (data.length > 0) ? Balance.from(data): Balance.from(0);
 
   const ownerData = Storage.get(ownerKey, 16);
-  const ownerBalance = (ownerData.length > 0) ? u128.from(ownerData): u128.from(0);
+  const ownerBalance = (ownerData.length > 0) ? Balance.from(ownerData): Balance.from(0);
 
   const receiverData = Storage.get(destKey, 16);
-  const destBalance = (receiverData.length > 0) ? u128.from(receiverData): u128.from(0);
+  const destBalance = (receiverData.length > 0) ? Balance.from(receiverData): Balance.from(0);
 
   if ((allowBalance >= value) && (ownerBalance >= value)) {
     Storage.set(ownerKey, (ownerBalance - value).toUint8Array());
@@ -127,51 +132,76 @@ function transferFrom(params: Uint8Array): void {
   }
 }
 
+function getCaller(): AccountId {
+  const c = Contract.caller();
+  return new AccountId(Util.typedToArray(c));
+}
+
+/**
+ * Entry of call dispatch
+ */
 export function call(): void {
-  const input = Contract.input();
-  if (input.length < 4) {
+  const data = Contract.input();
+  if (data.length < 4) {
     return;
   }
 
-  const selector = bswap(load<i32>(input.dataStart, 0));
+  const selector = bswap(load<i32>(data.dataStart, 0));
+  const input = data.subarray(4);
+  const reader = new BytesReader(Util.typedToArray(input));
+
   switch (selector) {
     case Method.TotalSupply: {
       Contract.returnValue(totalSupply());
       break;
     }
     case Method.BalanceOf: {
-      Contract.returnValue(balanceOf(input));
+      const owner = reader.readInto<AccountId>();
+      Contract.returnValue(balanceOf(owner));
       break;
     }
     case Method.Transfer: {
-      transfer(input);
+      const dest = reader.readInto<AccountId>();
+      const value = Balance.fromBytes(reader.readBytes(16));
+      transfer(dest, value);
       break;
     }
     case Method.Allowance: {
-      Contract.returnValue(allowance(input));
+      const owner = reader.readInto<AccountId>();
+      const spender = reader.readInto<AccountId>();
+      Contract.returnValue(allowance(owner, spender));
       break;
     }
     case Method.Approve: {
-      approve(input);
+      const spender = reader.readInto<AccountId>();
+      const value = Balance.fromBytes(reader.readBytes(16));
+      approve(spender, value);
       break;
     }
     case Method.TransferFrom: {
-      transferFrom(input);
+      const owner = reader.readInto<AccountId>();
+      const receiver = reader.readInto<AccountId>();
+      const value = Balance.fromBytes(reader.readBytes(16));
+      transferFrom(owner, receiver, value);
       break;
     }
   }
   return;
 }
 
+/**
+ * Entry of instantiate dispatch
+ */
 export function deploy(): void {
   const input = Contract.input();
   if (input.length < 4) {
     return;
   }
 
-  const total = input.subarray(4);
-  const caller = Contract.caller();
-  Storage.set(balanceKey(caller), total);
-  Storage.set(STORE_KEY, total);
+  const data = input.subarray(4);
+  const total = Balance.fromBytes(data);
+  const caller = getCaller();
+  Storage.set(balanceKey(caller), total.toUint8Array());
+  Storage.set(STORE_KEY, total.toUint8Array());
   return;
 }
