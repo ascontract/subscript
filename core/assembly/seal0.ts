@@ -154,3 +154,8 @@ export declare function seal_hash_blake2_256(
   input_len: i32,
   output_ptr: i32
 ): void;
+
+export declare function seal_println(
+  str_ptr: i32,
+  str_len: i32
+): void;

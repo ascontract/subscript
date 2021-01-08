@@ -10,7 +10,8 @@ import {
   seal_value_transferred,
   seal_block_number,
   seal_now,
-  seal_deposit_event
+  seal_deposit_event,
+  seal_println
 } from "./seal0";
 
 export namespace Contract {
@@ -145,5 +146,11 @@ export namespace Contract {
         buffer = buffer.concat(topics[i].toU8a());
     }
     seal_deposit_event(buffer.dataStart as i32, buffer.length, data.dataStart as i32, data.length);
+  }
+
+  export function println(content: string): void {
+    const encoded = String.UTF8.encode(content);
+    const bytes = Uint8Array.wrap(encoded);
+    seal_println(bytes.dataStart as i32, bytes.length);
   }
 }
