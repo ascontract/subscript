@@ -40,6 +40,10 @@ export class AccountId implements Codec {
     return this.eq(other);
   }
 
+  toString (): string {
+    return this._address.toString();
+  }
+
  	/**
    * Create new Account ID from Bytes Array
    */

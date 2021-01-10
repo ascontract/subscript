@@ -5,3 +5,4 @@ export { Contract } from "./contract";
 export { Crypto } from "./crypto";
 export { Util } from "./util";
 export { Balance, AccountId } from "./types";
+export { context } from "./context";

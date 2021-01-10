@@ -18,7 +18,7 @@ export namespace Contract {
   const CAPACITY: i32 = 1024;
 
   /**
-   * @description Returns the address of the caller.
+   * @description Returns the input data of tx.
    */
   export function input(): Uint8Array {
     let out = new Uint8Array(CAPACITY);
@@ -120,7 +120,7 @@ export namespace Contract {
   }
 
   /**
-   * @description Returns the address of the executed contract.
+   * @description Returns the blocknumber of the current context.
    */
   export function blockNumber(): Uint8Array {
     let out = new Uint8Array(8);
