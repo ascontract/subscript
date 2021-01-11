@@ -33,8 +33,8 @@ export namespace Contract {
   /**
    * @description Returns output buffer to contract
    */
-  export function returnValue(value: Uint8Array): void {
-    seal_return(0, value.dataStart as i32, value.length);
+  export function returnValue(value: Uint8Array, flags: u32 = 0): void {
+    seal_return(flags, value.dataStart as i32, value.length);
   }
 
   /**
