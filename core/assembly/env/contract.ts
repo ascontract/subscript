@@ -12,7 +12,7 @@ import {
   seal_now,
   seal_deposit_event,
   seal_println
-} from "./seal0";
+} from "../seal0";
 
 export namespace Contract {
   const CAPACITY: i32 = 1024;

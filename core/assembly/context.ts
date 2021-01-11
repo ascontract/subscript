@@ -1,5 +1,5 @@
 import { Hash, CompactInt, BIT_LENGTH } from "as-scale-codec";
-import { Contract } from "./contract";
+import { Contract } from "./env";
 import { AccountId, Balance } from "./types";
 import { Util } from "./util";
 

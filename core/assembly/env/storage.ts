@@ -1,7 +1,7 @@
 import {
   seal_get_storage,
   seal_set_storage
-} from "./seal0";
+} from "../seal0";
 
 export namespace Storage {
   export function set(key: Uint8Array, value: Uint8Array | null): void {
