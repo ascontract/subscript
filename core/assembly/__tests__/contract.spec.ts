@@ -1,42 +1,26 @@
-class Vec3 {
-  constructor(public x: f64 = 0, public y: f64 = 0, public z: f64 = 0) {}
-}
-describe("example", () => {
-  it("should be 42", () => {
-    expect<i32>(19 + 23).toBe(42, "19 + 23 is 42");
+import { BytesReader } from "as-scale-codec";
+import { AccountId } from "../types";
+
+describe("contract", () => {
+  it("AccountId from bytes", () => {
+    const bytes = new Array<u8>(32).fill(0x01);
+    expect<Array<u8>>(AccountId.fromU8Array(bytes).toU8a()).toStrictEqual(bytes, "Gen account from bytes");
   });
 
-  it("should be the same reference", () => {
-    let ref = new Vec3();
-    expect<Vec3>(ref).toBe(ref, "Reference Equality");
-  });
+  it("AccountId from stream", () => {
+    // Make encoded data of two AccountId
+    const addr1 = new Array<u8>(32).fill(0x01);
+    const addr2 = new Array<u8>(32).fill(0x02);
+    let input = new Array<u8>();
+    input = input.concat(addr1);
+    input = input.concat(addr2);
 
-  it("should perform a memory comparison", () => {
-    let a = new Vec3(1, 2, 3);
-    let b = new Vec3(1, 2, 3);
+    // Read two Account from input data
+    let reader = new BytesReader(input);
+    const acc1 = reader.readInto<AccountId>();
+    const acc2 = reader.readInto<AccountId>();
 
-    expect<Vec3>(a).toStrictEqual(
-      b,
-      "a and b have the same values, (discluding child references)",
-    );
-  });
-
-  it("should compare strings", () => {
-    expect<string>("a=" + "200").toBe("a=200", "both strings are equal");
-  });
-
-  it("should compare values", () => {
-    expect<i32>(10).toBeLessThan(200);
-    expect<i32>(1000).toBeGreaterThan(200);
-    expect<i32>(1000).toBeGreaterThanOrEqual(1000);
-    expect<i32>(1000).toBeLessThanOrEqual(1000);
-  });
-
-  it("can log some values to the console", () => {
-    log<string>("Hello world!"); // strings!
-    log<f64>(3.1415); // floats!
-    log<u8>(244); // integers!
-    log<u64>(0xffffffff); // long values!
-    log<ArrayBuffer>(new ArrayBuffer(50)); // bytes!
+    expect<Array<u8>>(acc1.toU8a()).toStrictEqual(addr1, "Gen account 1 from stream");
+    expect<Array<u8>>(acc2.toU8a()).toStrictEqual(addr2, "Gen account 1 from stream");
   });
 });

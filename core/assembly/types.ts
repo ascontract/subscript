@@ -9,7 +9,6 @@ export class AccountId implements Codec {
   private _address: u8[];
 
   constructor(bytes: u8[] = []) {
-    assert(bytes.length == AccountId.ADDRESS_LENGTH, "AccountId: must be 32 bytes length");
     this._address = new Array<u8>();
     this._address = this._address.concat(bytes);
   }
@@ -27,7 +26,7 @@ export class AccountId implements Codec {
   }
 
   populateFromBytes(bytes: u8[], index: i32 = 0): void {
-    assert(bytes.length - index == AccountId.ADDRESS_LENGTH, "AccountId: must be 32 bytes length");
+    assert(bytes.length - index >= AccountId.ADDRESS_LENGTH, "AccountId: must be 32 bytes length");
     this._address = new Array<u8>();
     this._address = this._address.concat(bytes.slice(index, index + AccountId.ADDRESS_LENGTH));
   }
