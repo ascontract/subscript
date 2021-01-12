@@ -1,21 +1,20 @@
+import { u128 } from "as-bignum";
+import { BytesReader } from "as-scale-codec";
+
+
 export namespace Util {
   /**
    * Convert a given string into a Uint8Array encoded as UTF-8.
    */
   export function stringToBytes(s: string): Uint8Array {
-    let len = String.UTF8.byteLength(s, true) - 1;
-    let bytes = new Uint8Array(len);
-    memory.copy(bytes.dataStart, toUTF8(s), len);
-    return bytes;
+    let utf8Bytes = String.UTF8.encode(s);
+    return Uint8Array.wrap(utf8Bytes);
   }
 
   /**
    * Decode an UTF-8 encoded Uint8Array into a string.
    */
-  export function bytesToString(bytes: Uint8Array | null): string | null {
-    if (bytes == null) {
-      return null;
-    }
+  export function bytesToString(bytes: Uint8Array): string {
     return String.UTF8.decode(uint8ArrayToBuffer(bytes), true);
   }
 
@@ -62,6 +61,24 @@ export namespace Util {
     }
     assert(false);
   }
+
+  export function encodeNumber<T>(num: T): u8[] {
+    if (isInteger<T>()) {
+      const arr = new Array<u8>(sizeof<T>());
+      store<T>(arr.dataStart, num);
+      return arr;
+    }
+    assert(false);
+  }
+
+  export function decodeScale<T>(reader: BytesReader): T {
+    if (isInteger<T>()) {
+      const bytes = reader.readBytes(sizeof<T>());
+      return load<T>(bytes.dataStart, 0);
+    }
+    return reader.readInto<T>();
+  }
+
 
   function uint8ArrayToBuffer(array: Uint8Array): ArrayBuffer {
     return array.buffer.slice(

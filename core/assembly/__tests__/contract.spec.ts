@@ -1,5 +1,6 @@
 import { BytesReader } from "as-scale-codec";
 import { AccountId } from "../types";
+import { Util } from "../util";
 
 describe("contract", () => {
   it("AccountId from bytes", () => {
@@ -44,4 +45,36 @@ describe("contract", () => {
     // 4 bytes left after decode two account
     expect<usize>(reader.getLeftoverBytes().length).toStrictEqual(4, "Left 4 bytes for decode 2 accounts");
   });
+
+  it("Decode i32 from buffer", () => {
+    // Make encoded data of i32
+    const buf = new Array<u8>(4).fill(0x00);
+
+    let reader = new BytesReader(buf);
+    let num = Util.decodeScale<i32>(reader);
+
+    expect<i32>(num).toStrictEqual(0, "Decode i32 from stream");
+    expect<usize>(reader.getLeftoverBytes().length).toStrictEqual(0, "Left 0 bytes for decode 1 number");
+  });
+
+  it("Encode string to bytes without null terminator", () => {
+    const s = "abc";
+    let bytes = Util.stringToBytes(s);
+
+    expect(bytes.length).toStrictEqual(3, "abc string should be 3 bytes");
+    expect(bytes[0]).toStrictEqual(97, "a => 97");
+    expect(bytes[1]).toStrictEqual(98, "b => 98");
+    expect(bytes[2]).toStrictEqual(99, "c => 99");
+  });
+
+  it("Decode bytes to string", () => {
+    let bytes = new Uint8Array(3);
+    bytes[0] = 97;
+    bytes[1] = 98;
+    bytes[2] = 99;
+
+    let s = Util.bytesToString(bytes);
+    expect<string>(s).toStrictEqual("abc", "abc string decode from bytes");
+  });
+
 });
