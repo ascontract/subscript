@@ -14,7 +14,11 @@
     "assemblyscript": "^0.16.1",
     "@assemblyscript/loader": "^0.16.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@as-pect/assembly": "^4.0.0",
+    "@as-pect/cli": "^4.0.0",
+    "@as-pect/core": "^4.0.0"
+  },
   "private": true,
   "workspaces": [
     "core",

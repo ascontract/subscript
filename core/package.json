@@ -18,11 +18,16 @@
   },
   "scripts": {
     "build": "npm run asbuild",
+    "test": "asp --summary",
     "asbuild:tsd": "asc assembly/index.ts -d build/index.d.ts",
     "asbuild:optimized": "asc assembly/index.ts -b build/core.wasm -t build/core.wat --importMemory --noAssert --use abort=  --sourceMap --optimize",
     "asbuild": "npm run asbuild:tsd && npm run asbuild:optimized"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@as-pect/assembly": "^4.0.0",
+    "@as-pect/cli": "^4.0.0",
+    "@as-pect/core": "^4.0.0"
+  },
   "engines": {
     "node": ">=12.0.0"
   }
