@@ -2,6 +2,9 @@ import { u128 } from "as-bignum";
 import { Codec, Hash } from "as-scale-codec";
 import { Util } from "./util";
 
+/**
+ * Account ID of substrate account address with scale-codec
+ */
 export class AccountId implements Codec {
 	// The byte length of Account Address
   public static readonly ADDRESS_LENGTH: i32 = 32;
@@ -13,32 +16,53 @@ export class AccountId implements Codec {
     this._address = this._address.concat(bytes);
   }
 
+  /**
+   * Returns the Bytes that represent the address
+   */
   getAddress(): u8[] {
     return this._address;
   }
 
+  /**
+   * The the length of bytes for encoding AccountId with scale-codec
+   */
   encodedLength(): i32 {
     return this._address.length;
   }
 
+  /**
+   * Converts AccouontId to encoded bytes
+   */
   toU8a(): u8[]{
     return this._address;
   }
 
+  /**
+   * Converts encoded bytes to AccountId instance
+   */
   populateFromBytes(bytes: u8[], index: i32 = 0): void {
     assert(bytes.length - index >= AccountId.ADDRESS_LENGTH, "AccountId: must be 32 bytes length");
     this._address = new Array<u8>();
     this._address = this._address.concat(bytes.slice(index, index + AccountId.ADDRESS_LENGTH));
   }
 
+  /**
+   * Test two instance equal
+   */
   eq(other: AccountId): bool {
     return Util.arrayEqual(this.getAddress(), other.getAddress());
   }
 
+  /**
+   * Test two instance not equal
+   */
   notEq(other: AccountId): bool {
     return this.eq(other);
   }
 
+  /**
+   * Format AccountId to string
+   */
   toString (): string {
     return this._address.toString();
   }

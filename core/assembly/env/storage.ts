@@ -5,6 +5,9 @@ import {
 } from "../seal0";
 
 export namespace Storage {
+  /**
+   * Set the value specified by the given key in the storage.
+   */
   export function set(key: Uint8Array, value: Uint8Array | null): void {
     if(key.length === 32) {
       const pointer = value!.dataStart as i32 || 0;
@@ -13,6 +16,9 @@ export namespace Storage {
     }
   }
 
+  /**
+   * Read the value under the given key in the storage.
+   */
   export function get(key: Uint8Array, length: i32): Uint8Array {
     let value = new Uint8Array(length);
     let out_len = new Int32Array(1);
@@ -22,6 +28,9 @@ export namespace Storage {
     return value;
   }
 
+  /**
+   * Clear the value under the given key in the storage.
+   */
   export function clear(key: Uint8Array): void {
     assert(key.length <= 32, "Store Key: must be 32 bytes length");
     seal_clear_storage(key.dataStart as i32);

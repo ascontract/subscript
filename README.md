@@ -2,9 +2,9 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-SubScript is a smart contract language written in AssemblyScript for substrate based chain. We will provide essential substrate api and builtin tools to support contract development.
+subscript is a smart contract language written in AssemblyScript for substrate based chain. We will provide essential substrate api and builtin tools to support contract development.
 
-Similar to parity ink, SubScript is built on top of  AssemblyScript and follow all AssemblyScript syntax. SubScript is more like a development kit with some builtin module and tools. As assemblyscript is easy to interact with TypeScript and JavaScript, SubScript is much more friendly for dapp developers.
+Similar to parity ink, subscript is built on top of  AssemblyScript and follow all AssemblyScript syntax. subscript is more like a development kit with some builtin module and tools. As assemblyscript is easy to interact with TypeScript and JavaScript, subscript is much more friendly for DApp developers.
 
 ## How subscript Works
 
@@ -13,11 +13,11 @@ which implements an API for typical functions smart contracts need (storage, que
 * The `contracts` pallet requires smart contracts to be uploaded to the blockchain as a Wasm blob.
 * subscript is a smart contract language which targets the API exposed by `contracts`. subscript smart contracts are compiled to Wasm.
 
-## Collection of library of the subscript library
+## Collection of the subscript library
 
-[subscript/core](./core/README.md) includes contract library with essential core compoments implemented.
+[subscript/core](./core) includes contract library with essential core compoments implemented.
 Developers can use the `subscript/core` to interact with the host environment. It privide basic basic types,
-storage acceess and contract interface. for more detail, see the [core documents](./core/README.md).
+storage acceess and contract interface. for more detail, see the [subscript/core doc](./core/README.md).
 
 the [example](./examples) directory provide some examples to demonstrate how to use the subscript library.
 The [Flipper contract](./examples/flipper) imports low-level api to interact with the contract node and
@@ -53,7 +53,7 @@ yarn test
 
 See [LICENSE-APACHE](LICENSE) for details.
 
-## sponsors!
+## Sponsors!
 
 The project is funded by
 

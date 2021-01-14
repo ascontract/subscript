@@ -20,12 +20,6 @@ Install all dependencies
 yarn
 ```
 
-Compile the package to wasm
-
-```
-yarn build
-```
-
 ## Testing
 
 To run the unit test:

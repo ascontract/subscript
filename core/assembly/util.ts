@@ -40,6 +40,9 @@ export namespace Util {
     return result;
   }
 
+  /**
+   * Test two array are strict equeal
+   */
   export function arrayEqual<T>(a: Array<T>, b: Array<T>): bool {
     if (a.length != b.length) {
       return false;
@@ -53,6 +56,9 @@ export namespace Util {
     return true;
   }
 
+  /**
+   * Convert a number to raw bytes
+   */
   export function toBytes<T>(num: T): Uint8Array {
     if (isInteger<T>()) {
       const arr = new Uint8Array(sizeof<T>());
@@ -62,6 +68,9 @@ export namespace Util {
     assert(false);
   }
 
+  /**
+   * Encode a fixed number to scale-codec bytes
+   */
   export function encodeNumber<T>(num: T): u8[] {
     if (isInteger<T>()) {
       const arr = new Array<u8>(sizeof<T>());
@@ -71,6 +80,10 @@ export namespace Util {
     assert(false);
   }
 
+  /**
+   * Decode objects from scale-codec bytes, The target needs to implement
+   * scale codec interface
+   */
   export function decodeScale<T>(reader: BytesReader): T {
     if (isInteger<T>()) {
       const bytes = reader.readBytes(sizeof<T>());
