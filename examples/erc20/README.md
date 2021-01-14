@@ -1,6 +1,6 @@
-# Flipper contract example
+# ERC20 contract example with subscript library
 
-Simple contract from ink! flipper example
+Simple ERC20 contract example
 
 **Install dependencies:**
 
@@ -8,8 +8,10 @@ Simple contract from ink! flipper example
 yarn install
 ```
 
-**Build Wasm files**
+**Build Wasm target**
 
 ```
 yarn build
 ```
+
+After build, you can find the target wasm file in ./build/erc20.wasm

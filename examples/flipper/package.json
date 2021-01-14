@@ -9,8 +9,6 @@
   "scripts": {
     "build:optimized": "asc assembly/index.ts -b build/flipper.wasm -t build/flipper.wat --runtime half --noExportMemory --importMemory --noAssert --use abort= --optimize --initialMemory=16 --maximumMemory=16",
     "build:tsd": "asc assembly/index.ts -d build/index.d.ts",
-    "build:prune": "wasm-prune --exports call,deploy build/flipper.wasm build/flipper-strip.wasm",
-    "build:text": "wasm2wat build/flipper-strip.wasm -o build/flipper-strip.wat",
     "build": "yarn build:optimized && yarn build:tsd",
     "clean": "rm -rf node_modules && rm -rf build"
   },

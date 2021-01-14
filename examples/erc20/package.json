@@ -9,8 +9,6 @@
   "scripts": {
     "build:optimized": "asc assembly/index.ts -b build/erc20.wasm -t build/erc20.wat --runtime half --noExportMemory --importMemory --noAssert --use abort= --optimize --initialMemory=16 --maximumMemory=16",
     "build:tsd": "asc assembly/index.ts -d build/index.d.ts",
-    "build:prune": "wasm-prune --exports call,deploy build/erc20.wasm build/erc20-strip.wasm",
-    "build:text": "wasm2wat build/erc20-strip.wasm -o build/erc20-strip.wat",
     "build": "yarn build:optimized && yarn build:tsd",
     "clean": "rm -rf node_modules && rm -rf build"
   },

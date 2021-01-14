@@ -5,6 +5,7 @@ import {
   Crypto,
   Contract,
   Balance,
+  context,
   AccountId
 } from "@subscript/core";
 
@@ -76,7 +77,7 @@ function balanceOf(owner: AccountId): Uint8Array {
 }
 
 function transfer(dest: AccountId, value: Balance): void {
-  const owner = getCaller();
+  const owner = context.caller;
 
   const ownerKey = balanceKey(owner);
   const destKey = balanceKey(dest);
@@ -104,13 +105,13 @@ function allowance(owner: AccountId, spender: AccountId): Uint8Array {
 }
 
 function approve(spender: AccountId, value: Balance): void {
-  const owner = getCaller();
+  const owner = context.caller;
 
   Storage.set(allowanceKey(owner, spender), value.toUint8Array());
 }
 
 function transferFrom(owner: AccountId, receiver: AccountId, value: Balance): void {
-  const spender = getCaller();
+  const spender = context.caller;
 
   const ownerKey = balanceKey(owner);
   const destKey = balanceKey(receiver);
@@ -132,13 +133,9 @@ function transferFrom(owner: AccountId, receiver: AccountId, value: Balance): vo
   }
 }
 
-function getCaller(): AccountId {
-  const c = Contract.caller();
-  return new AccountId(Util.typedToArray(c));
-}
-
 /**
  * Entry of call dispatch
+ * unlike ink!, the return value of `call` is void
  */
 export function call(): void {
   const data = Contract.input();
@@ -146,7 +143,9 @@ export function call(): void {
     return;
   }
 
+  // Transform four bytes selector to BIGENDIAN Integer
   const selector = bswap(load<i32>(data.dataStart, 0));
+  // Take the remain bytes to scale decoder
   const input = data.subarray(4);
   const reader = new BytesReader(Util.typedToArray(input));
 
@@ -191,6 +190,7 @@ export function call(): void {
 
 /**
  * Entry of instantiate dispatch
+ * unlike ink!, the return value of `deploy` is void
  */
 export function deploy(): void {
   const input = Contract.input();
@@ -200,7 +200,7 @@ export function deploy(): void {
 
   const data = input.subarray(4);
   const total = Balance.fromBytes(data);
-  const caller = getCaller();
+  const caller = context.caller;
   Storage.set(balanceKey(caller), total.toUint8Array());
   Storage.set(STORE_KEY, total.toUint8Array());
   return;

@@ -1,5 +1,5 @@
 import { u128 } from "as-bignum";
-import { Codec } from "as-scale-codec";
+import { Codec, Hash } from "as-scale-codec";
 import { Util } from "./util";
 
 export class AccountId implements Codec {
@@ -63,3 +63,4 @@ export class AccountId implements Codec {
 }
 
 export { u128 as Balance };
+export { Hash };
