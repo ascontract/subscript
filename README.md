@@ -23,7 +23,7 @@ the [example](./examples) directory provide some examples to demonstrate how to 
 The [Flipper contract](./examples/flipper) imports low-level api to interact with the contract node and
 The [ERC20 contract](./examples/erc20) demonstrate more complex feature.
 
-## Get started with subscript
+## Get started with subscript library
 
 This repository requires yarn and yarn workspaces.
 
@@ -32,7 +32,7 @@ The following command show how to setup the dev environment.
 1. Install all dependencies
 
 ```
-yarn
+yarn install
 ```
 
 2. To compile contract examples to wasm, change to example dir and run:
@@ -47,6 +47,12 @@ yarn build
 cd ./core
 yarn test
 ```
+## License
+
+`subscript` is distributed under the terms of the Apache License (Version 2.0).
+
+See [LICENSE-APACHE](LICENSE) for details.
+
 ## sponsors!
 
 The project is funded by
