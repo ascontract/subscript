@@ -35,19 +35,22 @@ The following command show how to setup the dev environment.
 yarn
 ```
 
-2. Compile all packages, projects and contract examples to wasm
+2. To compile contract examples to wasm, change to example dir and run:
 
 ```
 yarn build
 ```
 
-3. To run tests in the repository:
+3. To run tests in the subscript/core:
 
 ```
+cd ./core
 yarn test
 ```
-
+## sponsors!
 
 The project is funded by
 
+<p>
 <img align="left" width="200" src="./img/w3f_grants_badge_black.svg">
+</p>
