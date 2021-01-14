@@ -1,5 +1,6 @@
 import {
   seal_get_storage,
+  seal_clear_storage,
   seal_set_storage
 } from "../seal0";
 
@@ -19,5 +20,10 @@ export namespace Storage {
 
     const result = seal_get_storage(key.dataStart as i32, value.dataStart as i32, out_len.dataStart as i32);
     return value;
+  }
+
+  export function clear(key: Uint8Array): void {
+    assert(key.length <= 32, "Store Key: must be 32 bytes length");
+    seal_clear_storage(key.dataStart as i32);
   }
 }

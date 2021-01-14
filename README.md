@@ -16,3 +16,28 @@ which implements an API for typical functions smart contracts need (storage, que
 The project is funded by
 
 <img align="left" width="200" src="./img/w3f_grants_badge_black.svg">
+
+
+## Setup environment
+
+This repository requires yarn and yarn workspaces.
+
+The following command show how to setup the dev environment.
+
+1. Install all dependencies
+
+```
+yarn
+```
+
+2. Compile all packages, projects and contract examples to wasm
+
+```
+yarn build
+```
+
+3. To run tests in the repository:
+
+```
+yarn test
+```
