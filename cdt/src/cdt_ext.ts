@@ -20,8 +20,8 @@ import {
 
 
 type ABIType = {
-  name: string,
-  typeId: number
+  displayName: string[],
+  type: number
 }
 
 type ABIParameter = {
@@ -31,9 +31,15 @@ type ABIParameter = {
 
 type ABIMessage = {
   payable: boolean,
-  returnType: ABIParameter,
-  args: ABIParameter[]
+  returnType: ABIType,
+  args: ABIParameter[],
+  selector: string,
+  mutates: boolean,
+  name: string
 }
+
+let messages: ABIMessage[] = [];
+let registery: ABIType[] = [];
 
 export class ContractExtension extends PathTransformVisitor {
 
@@ -41,15 +47,31 @@ export class ContractExtension extends PathTransformVisitor {
     if (utils.hasDecorator(node, "list")) {
       const name = utils.toString(node.name);
       const sig = utils.toString(node.signature);
-      this.stdout.write("fn=" + name + ", signature: " + sig + "\n");
+      const selector = blake.blake2bHex(name, null, 32).substring(0, 8);
 
-      const selector = blake.blake2b("abc", null, 32).subarray(0, 4);
-      this.stdout.write("fn " + name + " selector: " + selector + "\n");
+      const args: ABIParameter[] = [];
 
+      this.stdout.write("fn " + name + " signature" + sig + " selector: " + selector + "\n");
       for (let i = 0; i < node.signature.parameters.length; i++) {
         this.stdout.write("params: " + utils.toString(node.signature.parameters[i].name) + ": " + utils.toString(node.signature.parameters[i].type) + "\n");
+        args.push({
+          name: utils.toString(node.signature.parameters[i].name),
+          type: {
+            displayName: [utils.toString(node.signature.parameters[i].type)],
+            type: 0
+          }
+        })
       }
       this.stdout.write("return: " + utils.toString(node.signature.returnType) + "\n");
+
+      messages.push({
+        name: name,
+        args: args,
+        selector: "0x" + selector,
+        mutates: false,
+        returnType: {displayName: [utils.toString(node.signature.returnType)], type: 0},
+      });
+
     }
   }
 
@@ -67,7 +89,12 @@ export class ContractExtension extends PathTransformVisitor {
     }
     let meta = {
       contract: detail,
-      spec: {},
+      spec: {
+        docs: [],
+        events: [],
+        constructors: [],
+        messages: messages,
+      },
     }
     return JSON.stringify(meta, null, 2);
   }
