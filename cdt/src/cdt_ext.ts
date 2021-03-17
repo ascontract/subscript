@@ -35,7 +35,7 @@ type ABIMessage = {
   args: ABIParameter[],
   selector: string,
   mutates: boolean,
-  name: string
+  name: string[]
 }
 
 let messages: ABIMessage[] = [];
@@ -44,16 +44,17 @@ let registery: ABIType[] = [];
 export class ContractExtension extends PathTransformVisitor {
 
   visitFunctionDeclaration(node: FunctionDeclaration): void {
-    if (utils.hasDecorator(node, "list")) {
+    if (utils.hasDecorator(node, "as_view")) {
       const name = utils.toString(node.name);
       const sig = utils.toString(node.signature);
       const selector = blake.blake2bHex(name, null, 32).substring(0, 8);
-
+      const returnType = utils.toString(node.signature.returnType);
       const args: ABIParameter[] = [];
 
-      this.stdout.write("fn " + name + " signature" + sig + " selector: " + selector + "\n");
+      this.stdout.write("fn " + name + " signature" + sig + " selector: " + selector + "return: " +  returnType + "\n");
+
       for (let i = 0; i < node.signature.parameters.length; i++) {
-        this.stdout.write("params: " + utils.toString(node.signature.parameters[i].name) + ": " + utils.toString(node.signature.parameters[i].type) + "\n");
+        this.stdout.write(name + " params: " + utils.toString(node.signature.parameters[i].name) + ": " + utils.toString(node.signature.parameters[i].type) + "\n");
         args.push({
           name: utils.toString(node.signature.parameters[i].name),
           type: {
@@ -62,10 +63,9 @@ export class ContractExtension extends PathTransformVisitor {
           }
         })
       }
-      this.stdout.write("return: " + utils.toString(node.signature.returnType) + "\n");
 
       messages.push({
-        name: name,
+        name: [name],
         args: args,
         selector: "0x" + selector,
         mutates: false,
