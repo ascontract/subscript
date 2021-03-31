@@ -9,15 +9,19 @@
   "author": "Symon Ho",
   "license": "Apache-2.0",
   "dependencies": {
+    "@assemblyscript/loader": "^0.16.1",
     "as-bignum": "^0.2.4",
     "as-scale-codec": "git+https://github.com/ascontract/as-scale-codec.git#149c634773a0544b4919aa3fb6f474c4f0f8a9ad",
     "assemblyscript": "^0.16.1",
-    "@assemblyscript/loader": "^0.16.1"
+    "visitor-as": "^0.3.2",
+    "ts-node": "^9.1.1",
+    "blakejs": "^1.1.0"
   },
   "devDependencies": {
     "@as-pect/assembly": "^4.0.0",
     "@as-pect/cli": "^4.0.0",
-    "@as-pect/core": "^4.0.0"
+    "@as-pect/core": "^4.0.0",
+    "typescript": "^4.1.3"
   },
   "private": true,
   "workspaces": [
