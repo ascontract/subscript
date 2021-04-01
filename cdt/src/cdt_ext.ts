@@ -38,8 +38,19 @@ type ABIMessage = {
   name: string[]
 }
 
+enum TypeStruct {
+  Primitive,
+  Composite,
+  Array
+}
+
+interface TypeDef {
+  structure: TypeStruct,
+  path: string[]
+}
+
 let messages: ABIMessage[] = [];
-let registery: ABIType[] = [];
+let registery: TypeDef[] = [];
 
 export class ContractExtension extends PathTransformVisitor {
 
