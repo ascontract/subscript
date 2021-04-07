@@ -38,19 +38,92 @@ type ABIMessage = {
   name: string[]
 }
 
-enum TypeStruct {
+enum TypeKind {
   Primitive,
   Composite,
   Array
 }
 
-interface TypeDef {
-  structure: TypeStruct,
-  path: string[]
+class TypeDef {
+  constructor(
+    public structure: TypeKind,
+    public typeId: string,
+    public fields: number[],
+    public length: number = 0,
+    public path: string[] = []
+  ){}
+
+  toJSON(): any {
+    if (this.structure == TypeKind.Primitive) {
+      return {
+        def: {
+          primitive: this.typeId
+        }
+      };
+    }
+
+    if (this.structure == TypeKind.Array) {
+      return {
+        def: {
+          array: {
+            len: this.length,
+            type: this.fields[0]
+          }
+        }
+      };
+    }
+
+    if (this.structure == TypeKind.Composite) {
+      return {
+        def: {
+          composite: {
+            fields: this.fields.map(field => ({ type: field })),
+          }
+        }
+      };
+    }
+  }
+}
+
+class TypeRegistery {
+  types: Map<string, number>;
+
+  constructor() {
+    this.types = new Map()
+  }
+
+  registerType(ty: string): number {
+    let id = this.predefineTypes(ty);
+    return id;
+  }
+
+  getType(identifier: string): number {
+    return this.types.get(identifier);
+  }
+
+  predefineTypes(name: string): number {
+    switch (name) {
+      case "bool":
+      case "boolean":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "bool", []));
+        return typeTable.length;
+      case "u8":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "u8", []));
+        return typeTable.length;
+      case "AccountId":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "u8", []));
+        typeTable.push(new TypeDef(TypeKind.Array, "Array<u8>", [typeTable.length], 32));
+        typeTable.push(new TypeDef(TypeKind.Composite, "AccountId", [typeTable.length], 0, ["ink_env", "types", "AccountId"]));
+        return typeTable.length;
+      default:
+        return null;
+    }
+  }
 }
 
 let messages: ABIMessage[] = [];
-let registery: TypeDef[] = [];
+let typeTable: TypeDef[] = [];
+let registery = new TypeRegistery();
 
 export class ContractExtension extends PathTransformVisitor {
 
@@ -66,13 +139,29 @@ export class ContractExtension extends PathTransformVisitor {
 
       for (let i = 0; i < node.signature.parameters.length; i++) {
         this.stdout.write(name + " params: " + utils.toString(node.signature.parameters[i].name) + ": " + utils.toString(node.signature.parameters[i].type) + "\n");
+
+        const typeId = utils.toString(node.signature.parameters[i].type);
+        let typeNum = registery.getType(typeId);
+        if (typeNum == null) {
+          typeNum = registery.registerType(typeId);
+          if (typeNum == null) {
+            continue;
+          }
+        }
+
         args.push({
           name: utils.toString(node.signature.parameters[i].name),
           type: {
             displayName: [utils.toString(node.signature.parameters[i].type)],
-            type: 0
+            type: typeNum
           }
-        })
+        });
+      }
+
+      let retId = utils.toString(node.signature.returnType);
+      let retNum = registery.getType(retId);
+      if (retNum == null) {
+          retNum = registery.registerType(retId);
       }
 
       messages.push({
@@ -80,7 +169,7 @@ export class ContractExtension extends PathTransformVisitor {
         args: args,
         selector: "0x" + selector,
         mutates: false,
-        returnType: {displayName: [utils.toString(node.signature.returnType)], type: 0},
+        returnType: {displayName: [retId], type: retNum}
       });
 
     }
@@ -106,6 +195,7 @@ export class ContractExtension extends PathTransformVisitor {
         constructors: [],
         messages: messages,
       },
+      types: typeTable
     }
     return JSON.stringify(meta, null, 2);
   }
