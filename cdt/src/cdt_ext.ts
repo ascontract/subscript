@@ -128,7 +128,7 @@ let registery = new TypeRegistery();
 export class ContractExtension extends PathTransformVisitor {
 
   visitFunctionDeclaration(node: FunctionDeclaration): void {
-    if (utils.hasDecorator(node, "as_view")) {
+    if (utils.hasDecorator(node, "as_view") || utils.hasDecorator(node, "as_external")) {
       const name = utils.toString(node.name);
       const sig = utils.toString(node.signature);
       const selector = blake.blake2bHex(name, null, 32).substring(0, 8);
@@ -168,7 +168,7 @@ export class ContractExtension extends PathTransformVisitor {
         name: [name],
         args: args,
         selector: "0x" + selector,
-        mutates: false,
+        mutates: utils.hasDecorator(node, "as_external") ? true : false,
         returnType: {displayName: [retId], type: retNum}
       });
 
