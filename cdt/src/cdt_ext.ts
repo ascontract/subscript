@@ -110,6 +110,24 @@ class TypeRegistery {
       case "u8":
         typeTable.push(new TypeDef(TypeKind.Primitive, "u8", []));
         return typeTable.length;
+      case "u32":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "u32", []));
+        return typeTable.length;
+      case "u64":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "u64", []));
+        return typeTable.length;
+      case "u64":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "u64", []));
+        return typeTable.length;
+      case "i8":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "i8", []));
+        return typeTable.length;
+      case "i32":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "i32", []));
+        return typeTable.length;
+      case "i64":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "i64", []));
+        return typeTable.length;
       case "AccountId":
         typeTable.push(new TypeDef(TypeKind.Primitive, "u8", []));
         typeTable.push(new TypeDef(TypeKind.Array, "Array<u8>", [typeTable.length], 32));
