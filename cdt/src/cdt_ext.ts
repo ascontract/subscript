@@ -110,6 +110,9 @@ class TypeRegistery {
       case "u8":
         typeTable.push(new TypeDef(TypeKind.Primitive, "u8", []));
         return typeTable.length;
+      case "u16":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "u16", []));
+        return typeTable.length;
       case "u32":
         typeTable.push(new TypeDef(TypeKind.Primitive, "u32", []));
         return typeTable.length;
@@ -121,6 +124,9 @@ class TypeRegistery {
         return typeTable.length;
       case "i8":
         typeTable.push(new TypeDef(TypeKind.Primitive, "i8", []));
+        return typeTable.length;
+      case "i16":
+        typeTable.push(new TypeDef(TypeKind.Primitive, "i16", []));
         return typeTable.length;
       case "i32":
         typeTable.push(new TypeDef(TypeKind.Primitive, "i32", []));
@@ -153,8 +159,7 @@ export class ContractExtension extends PathTransformVisitor {
       const returnType = utils.toString(node.signature.returnType);
       const args: ABIParameter[] = [];
 
-      this.stdout.write("fn " + name + " signature" + sig + " selector: " + selector + "return: " +  returnType + "\n");
-
+      // this.stdout.write("fn " + name + " signature" + sig + " selector: " + selector + "return: " +  returnType + "\n");
       for (let i = 0; i < node.signature.parameters.length; i++) {
         this.stdout.write(name + " params: " + utils.toString(node.signature.parameters[i].name) + ": " + utils.toString(node.signature.parameters[i].type) + "\n");
 
