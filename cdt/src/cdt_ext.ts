@@ -211,6 +211,7 @@ export class ContractExtension extends PathTransformVisitor {
       version: "0.1.0"
     }
     let meta = {
+      metadataVersion: "0.1.0",
       contract: detail,
       spec: {
         docs: [],

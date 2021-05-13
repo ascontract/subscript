@@ -12,10 +12,10 @@ enum Method {
 }
 
 @as_view
-function get(): Uint8Array {
+function get(): bool {
   const data = Storage.get(STORE_KEY, 1);
   const status: u8 = data.length ? (new DataView(data.buffer)).getUint8(0) : 0;
-  return (new Uint8Array(1)).fill(status);
+  return status as bool;
 }
 
 @as_external
@@ -39,7 +39,9 @@ export function call(): void {
       break;
     }
     case Method.Get: {
-      Contract.returnValue(get());
+      const ret = get();
+      const status = (new Uint8Array(1)).fill(ret);
+      Contract.returnValue(status);
       break;
     }
   }
