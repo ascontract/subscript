@@ -1,11 +1,11 @@
-# subscript lang to write substrate based smart contract
+# subscript lang to write wasm based smart contract
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-subscript is a smart contract language written in AssemblyScript for substrate based chain.
+subscript is a smart contract language written in AssemblyScript for wasm based chain.
 We will provide essential substrate api and builtin tools to support contract development.
 
-Similar to parity ink, subscript is built on top of  AssemblyScript and follow all AssemblyScript syntax.
+subscript is built on top of  AssemblyScript and follow all AssemblyScript syntax.
 subscript is more like a development kit with some builtin module and tools.
 As assemblyscript is easy to interact with TypeScript and JavaScript, subscript is much more friendly for DApp developers.
 
@@ -55,11 +55,3 @@ yarn test
 `subscript` is distributed under the terms of the Apache License (Version 2.0).
 
 See [LICENSE-APACHE](LICENSE) for details.
-
-## Sponsors!
-
-The project is funded by
-
-<p>
-<img align="left" width="200" src="./img/w3f_grants_badge_black.svg">
-</p>
